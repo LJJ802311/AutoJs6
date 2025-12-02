@@ -211,7 +211,7 @@ class Ocr(private val scriptRuntime: ScriptRuntime) : Augmentable(scriptRuntime)
                                     clip.oneShot() to opt
                                 }
                             }
-                            val results = when (scriptRuntime.ocr.mode) {
+                            val results = when (opt.prop("mode").takeIf { it is OcrMode } ?: scriptRuntime.ocr.mode) {
                                 OcrMode.MLKIT -> OcrMLKit.detectInternal(scriptRuntime, image, options)
                                 OcrMode.PADDLE -> OcrPaddle.detectInternal(scriptRuntime, image, options)
                                 OcrMode.RAPID -> OcrRapid.detectInternal(scriptRuntime, image, options)
