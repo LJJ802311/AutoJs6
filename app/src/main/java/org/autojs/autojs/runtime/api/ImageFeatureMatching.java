@@ -4,10 +4,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import org.autojs.autojs.annotation.ScriptInterface;
-import org.autojs.autojs.core.cleaner.Cleaner;
-import org.autojs.autojs.core.cleaner.ICleaner;
-import org.autojs.autojs.core.ref.MonitorResource;
-import org.autojs.autojs.core.ref.NativeObjectReference;
 import org.autojs.autojs.util.ImageUtils;
 import org.opencv.calib3d.Calib3d;
 import org.opencv.core.Core;
@@ -50,6 +46,7 @@ public final class ImageFeatureMatching {
     // @Hint by SuperMonster003 on May 14, 2025.
     //  ! This method was corrected and improved by JetBrains AI Assistant.
     //  ! zh-CN: 此方法由 JetBrains AI Assistant 纠正并完善.
+
     /**
      * Pre-computes a feature-matching descriptor for an image. The pipeline:
      * <ol>
@@ -62,7 +59,7 @@ public final class ImageFeatureMatching {
      * </ol></p>
      *
      * <p><b>zh-CN:</b><br>
-     *
+     * <p>
      * 创建 (预计算) 特征匹配描述符.<br>
      * 典型流程: <pre>
      * 1. (可选) 颜色空间转换 {@code cvtColorFlag}
@@ -81,12 +78,10 @@ public final class ImageFeatureMatching {
      *                     zh-CN: 缩放因子; >0 表示按比例缩放, ≤0 或 1 表示保持原尺寸.
      * @param method       Extraction method, see {@code FEATURE_MATCHING_METHOD_*}.<br>
      *                     zh-CN: 特征提取方法; 取值见 {@code FEATURE_MATCHING_METHOD_*}.
-     *
      * @return The generated descriptor. Release via
-     *         {@link FeatureMatchingDescriptor#release()} or rely on GC.<br>
-     *         zh-CN: 生成的 {@link FeatureMatchingDescriptor}; 仅当显式调用
-     *         {@link FeatureMatchingDescriptor#release()} 或对象被 GC 时才会释放其底层资源.
-     *
+     * {@link FeatureMatchingDescriptor#release()} or rely on GC.<br>
+     * zh-CN: 生成的 {@link FeatureMatchingDescriptor}; 仅当显式调用
+     * {@link FeatureMatchingDescriptor#release()} 或对象被 GC 时才会释放其底层资源.
      * @throws IllegalArgumentException Thrown if {@code src} is empty or {@code method} is unsupported.<br>
      *                                  zh-CN: 当 {@code src} 为空或不支持的 {@code method} 时抛出.
      */
@@ -155,21 +150,22 @@ public final class ImageFeatureMatching {
     // @Hint by SuperMonster003 on May 14, 2025.
     //  ! This method was corrected and improved by JetBrains AI Assistant.
     //  ! zh-CN: 此方法由 JetBrains AI Assistant 纠正并完善.
+
     /**
      * It matches two pre-computed feature descriptors and optionally estimates a homography
      * to locate where the <i>object</i> image appears inside the <i>scene</i> image.<br>
      *
      * <p>Internal steps: <br>
      * <ol>
-     *   <li>Create a suitable {@link org.opencv.features2d.DescriptorMatcher} based on {@code matcherType}</li> 
+     *   <li>Create a suitable {@link org.opencv.features2d.DescriptorMatcher} based on {@code matcherType}</li>
      *   <li>Perform KNN matching (k=2) and filter using Lowe's ratio test with threshold {@code threshold}</li>
      *   <li>If good matches ≥4, use {@code Calib3d.findHomography(..., RANSAC)} to further eliminate outliers
      *       while calculating projection (quad) of object image corners in scene image</li>
      *   <li>If caller sets {@code debugMatchesImagePath}, save visualization of match lines to that path</li>
      * </ol></p>
-     * 
+     *
      * <p><b>zh-CN:</b><br>
-     * 
+     * <p>
      * 在两张图的特征描述符之间执行匹配, 并 (可选) 估算单应矩阵以获得被 object 图在 scene 图中的投影区域.<br>
      * <p>内部流程: <br>
      * <ol>
@@ -190,16 +186,14 @@ public final class ImageFeatureMatching {
      *                              zh-CN: 可选调试路径; 非空时将匹配结果绘制到该文件.
      * @param threshold             Lowe ratio threshold (0,1); higher = looser filtering.<br>
      *                              zh-CN: Lowe Ratio 测试阈值 (0,1). 值越大匹配越宽松.
-     *
      * @return {@link FeatureMatchingResult}: <br>
-     *         • {@code getPoints()}      - Filtered matching point pairs (in scene coordinates)<br>
-     *         • {@code getQuad()}        - 4-point quadrilateral if homography estimation succeeded, otherwise {@code null}<br>
-     *         • {@code getMatches()}     - Rendered Mat if debug enabled, otherwise {@code null}<br>
-     *         • zh-CN:<br>
-     *         • {@code getPoints()}      - 过滤后的匹配点对 (scene 坐标系)<br>
-     *         • {@code getQuad()}        - 若成功估算单应矩阵则为 4 点四边形, 否则为 {@code null}<br>
-     *         • {@code getMatches()}     - 若开启调试则为绘制后的 Mat, 否则为 {@code null}<br>
-     *
+     * • {@code getPoints()}      - Filtered matching point pairs (in scene coordinates)<br>
+     * • {@code getQuad()}        - 4-point quadrilateral if homography estimation succeeded, otherwise {@code null}<br>
+     * • {@code getMatches()}     - Rendered Mat if debug enabled, otherwise {@code null}<br>
+     * • zh-CN:<br>
+     * • {@code getPoints()}      - 过滤后的匹配点对 (scene 坐标系)<br>
+     * • {@code getQuad()}        - 若成功估算单应矩阵则为 4 点四边形, 否则为 {@code null}<br>
+     * • {@code getMatches()}     - 若开启调试则为绘制后的 Mat, 否则为 {@code null}<br>
      * @throws IllegalStateException Thrown if descriptors are incompatible or already released.<br>
      *                               zh-CN: 当两侧描述子维度不兼容或资源已释放时抛出.
      */
@@ -314,11 +308,10 @@ public final class ImageFeatureMatching {
      * A reusable bundle of feature-extraction results for a single image.
      * zh-CN: 单张图片的特征提取结果集合.
      */
-    public static class FeatureMatchingDescriptor implements MonitorResource {
+    public static class FeatureMatchingDescriptor {
 
         private final Mat mDescriptors;
         private long mNativePtr;
-        private NativeObjectReference<MonitorResource> mRef;
         private final MatOfKeyPoint mKeyPoint;
         private final MatOfPoint2f mCorners;
 
@@ -344,15 +337,9 @@ public final class ImageFeatureMatching {
             mNativePtr = descriptors.nativeObj;
             mKeyPoint = keyPoint;
             mCorners = corners;
-            Cleaner.instance.cleanup(this, SelfCleaner.INSTANCE);
         }
 
         public long getNativePtr() {
-            return mNativePtr;
-        }
-
-        @Override
-        public long getPointer() {
             return mNativePtr;
         }
 
@@ -367,18 +354,10 @@ public final class ImageFeatureMatching {
         public void release() {
             synchronized (this) {
                 if (mNativePtr != 0L) {
-                    SelfCleaner.INSTANCE.cleanup(mNativePtr);
+                    releaseFeatureMatchingDescriptor(mNativePtr);
                     mNativePtr = 0L;
-                    if (mRef != null) {
-                        mRef.pointer = 0L;
-                    }
                 }
             }
-        }
-
-        @Override
-        public void setNativeObjectReference(NativeObjectReference<MonitorResource> ref) {
-            mRef = ref;
         }
 
         public void setNativePtr(long nativePtr) {
@@ -389,23 +368,6 @@ public final class ImageFeatureMatching {
             return mCorners;
         }
 
-        public static class SelfCleaner implements ICleaner {
-
-            public static SelfCleaner INSTANCE;
-
-            static {
-                INSTANCE = new SelfCleaner();
-            }
-
-            private SelfCleaner() {
-                /* Empty body. */
-            }
-
-            @Override
-            public void cleanup(long pointer) {
-                releaseFeatureMatchingDescriptor(pointer);
-            }
-        }
     }
 
     /**
@@ -415,8 +377,8 @@ public final class ImageFeatureMatching {
      * The {@code matches} image is only generated when the caller passes a non-null debug path.
      * <p>
      * <b>zh-CN</b><br>
-     * 表示一次 {@link #featureMatching} 调用结果的不可变对象.  
-     * 若单应矩阵估算失败, {@code quad} 为 {@code null}.  
+     * 表示一次 {@link #featureMatching} 调用结果的不可变对象.
+     * 若单应矩阵估算失败, {@code quad} 为 {@code null}.
      * 若未开启 debug 输出, {@code matches} 为 {@code null}.
      */
     public static class FeatureMatchingResult {
